@@ -1,5 +1,5 @@
-#/usr/bin/python
-#!conding=utf8
+#!/usr/bin/python
+#conding=utf8
 import MySQLdb
 #打开数据库连接
 db = MySQL.db.connect("localhost","root","123456","db")
