@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+# coding:utf8
+import psutil
+import MySQLdb
+import time
+Cpu_usage = psutil.cpu_percent()
+RAM = int(psutil.virtual_memory().total/(1027*1024))
+RAM_percent = psutil.virtual_memory().percent
+Swap = int(psutil.swap_memory().total/(1027*1024))
+Swap_percent = psutil.swap_memory().percent
+Net_sent = psutil.net_io_counters().bytes_sent
+Net_recv = psutil.net_io_counters().bytes_recv
+Net_spkg = psutil.net_io_counters().packets_sent
+Net_rpkg = psutil.net_io_counters().packets_recv
+
+connect = MySQLdb.connect(
+    host = 'localhost',
+    port = 3306,
+    user = 'root',
+    passwd = '123456',
+    db = 'register'
+)
+#实例化游标
+cur = connect.cursor()
+sql = "insert into sys_info_percent(Cpu_usage,RAM,RAM_percent,Swap,Swap_percent,Net_sent,Net_recv,Net_spkg,Net_rpkg) values('%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+data = (Cpu_usage,RAM,RAM_percent,Swap,Swap_percent,Net_sent,Net_recv,Net_spkg,Net_rpkg)
+# 使用execute方法执行SQL语句
+cur.execute(sql % data)
+connect.commit()
+
+cur.execute("select * from sys_info_percent")
+# 使用 fetchone() 方法获取一条数据库。
+stus =cur.fetchall()
+#print stus
